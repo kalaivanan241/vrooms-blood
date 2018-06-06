@@ -1,0 +1,122 @@
+
+<div *ngIf='addflag'>
+    <h2>Add Recipient</h2>
+  <form [formGroup]='recipientForm' (ngSubmit)='onSubmit()'>
+    <div class='row'>
+      <div class='form-group col-sm-4'>
+          <label>Hospital Name:<span class='required-red'>*</span>
+            <input type="text" class="form-control" formControlName='name'>
+            <div class='alert alert-danger' *ngIf="f.name.errors && !recipientForm.get('name').untouched">
+              <div *ngIf="f.name.errors.required"> Name required</div>
+              <div *ngIf='f.name.errors.pattern'>Enter valid Name</div>
+            </div>
+          </label>
+      </div>
+      <div class='form-group col-sm-4'>
+          <label>Address:<span class='required-red'>*</span>
+            <input type="text" class="form-control" formControlName='address'>
+            <div class='alert alert-danger' *ngIf="f.address.errors && !recipientForm.get('address').untouched">
+                <div *ngIf="f.address.errors.required"> Address required</div>
+            </div>
+          </label>
+      </div>
+    <div class="form-group col-sm-4">
+      <label>Phone Number:<span class='required-red'>*</span>
+        <input type="text" class='form-control' formControlName='phone'>
+        <div class='alert alert-danger' *ngIf="f.phone.errors && !recipientForm.get('phone').untouched">
+            <div *ngIf="f.phone.errors.required"> Number required</div>
+            <div *ngIf='f.phone.errors.pattern'>Enter valid number</div>
+        </div>
+      </label>
+    </div>
+    <div class="form-group col-sm-4">
+      <label>Recipient Name:<span class='required-red'>*</span>
+        <input type="text" class='form-control' formControlName='recipientName'>
+        <div class='alert alert-danger' *ngIf="f.recipientName.errors && !recipientForm.get('recipientName').untouched">
+            <div *ngIf="f.recipientName.errors.required"> Name required</div>
+            <div *ngIf='f.recipientName.errors.pattern'>Enter valid name</div>
+        </div>
+      </label>
+    </div>
+    <div class="form-group col-sm-4">
+      <label>Recipient Blood:<span class='required-red'>*</span>
+          <ng-select 
+          [items]="bloodGroupList"
+          bindLabel="name"
+          bindValue="key"
+          [multiple]="false"
+          clearAllText="Clear"
+          formControlName="recipientBlood"
+          placeholder="Select Blood Group">
+      </ng-select>
+      <div class='alert alert-danger' *ngIf="f.recipientBlood.errors && !recipientForm.get('recipientBlood').untouched">
+          <div *ngIf="f.recipientBlood.errors.required"> Select Blood Group</div>
+      </div>
+      </label>
+    </div>
+    <div class="form-group col-sm-4">
+      <label>Donor Blood:<span class='required-red'>*</span>
+          <ng-select 
+          [items]="bloodGroupList"
+          bindLabel="name"
+          bindValue="key"
+          [multiple]="true"
+          clearAllText="Clear"
+          formControlName="donorBlood"
+          placeholder="Select Blood Group">
+      </ng-select>
+      <div class='alert alert-danger' *ngIf="f.donorBlood.errors && !recipientForm.get('donorBlood').untouched">
+          <div *ngIf="f.errors.donorBlood.required"> Select Blood Group</div>
+      </div>
+      </label>
+    </div>
+    <div class="form-group col-sm-4">
+      <label>Unit Reqirement:<span class='required-red'>*</span>
+        <input type="number" class='form-control' formControlName='units'>
+        <div class='alert alert-danger' *ngIf="f.units.errors && !recipientForm.get('units').untouched">
+            <div *ngIf="f.recipientName.errors.required"> Units Required</div>
+            <div *ngIf='f.recipientName.errors.pattern'>Enter valid Number</div>
+        </div>
+      </label>
+    </div>
+    <div class="form-group col-sm-4">
+      <label>Urgent:
+        <input type="checkbox" class='form-control' formControlName='urgent'>
+      </label>
+    </div>
+  </div>
+  <div class="form-group col-sm-4">
+    <input type="submit" class='btn btn-primary' style="margin-right: 20px">
+    <button class='btn btn-primary' (click)='addflag = !addflag'>Cancel</button>
+</div>
+</form>
+</div>
+
+<div *ngIf='!addflag'>
+    <h2>Recipient List</h2>
+  <button class='btn btn-primary' (click)='addflag = !addflag' style="margin-bottom: 20px">+ Recipient</button>
+  <table class='table'>
+    <thead>    
+      <tr>
+        <th scope='col'>Hospital Name</th>
+        <th scope='col'>Address</th>
+        <th scope='col'>Phone No.</th>
+        <th scope='col'>Recipient Name</th>
+        <th scope='col'>Recipient Group</th>
+        <th scope='col'>Donor Group</th>
+        <th scope='col'>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr  scope='row' *ngFor='let reci of recipientList' [ngClass]="{'urgent': reci.urgent}">
+        <td scope='col'>{{ reci.name}}</td>
+        <td scope='col'>{{ reci.address}}</td>
+        <td scope='col'>{{ reci.phone}}</td>
+        <td scope='col'>{{ reci.recipientName  }}</td>
+        <td scope='col'>{{ getBlood(reci.recipientBlood) }}</td>
+        <td scope='col'>{{ getBloodArr(reci.donorBlood)}}</td>
+        <td scope='col'><span>Action</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

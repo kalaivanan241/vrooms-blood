@@ -1,0 +1,113 @@
+<div *ngIf='addflag'>
+    <h2>Add Donor</h2>
+  <form [formGroup] = 'donorForm' (ngSubmit)='onSubmit()'>
+    <div  class='row'>
+    <div class='form-group col-sm-4'>
+        <label> Name:<span class='required-red'>*</span>
+          <input type="text" class="form-control" formControlName='name'>
+          <div class='alert alert-danger' *ngIf="f.name.errors && !donorForm.get('name').untouched">
+              <div *ngIf='f.name.errors.required'>Enter Name</div>
+          </div>
+        </label>
+    </div>
+    <div class='form-group  col-sm-4'>
+        <label> Address:<span class='required-red'>*</span>
+          <input type="text" class="form-control" formControlName='address'>
+          <div class='alert alert-danger' *ngIf="f.address.errors && !donorForm.get('address').untouched">
+              <div *ngIf='f.address.errors.required'>Enter Address</div>
+          </div>
+        </label>
+    </div>
+    <div class='form-group  col-sm-4'>
+        <label>Phone Numer:<span class='required-red'>*</span>
+          <input type="text" class="form-control" formControlName='mobile'>
+          <div class='alert alert-danger' *ngIf="f.mobile.errors && !donorForm.get('mobile').untouched">
+              <div *ngIf='f.mobile.errors.required'>Enter mobile number</div>
+          </div>
+        </label>
+    </div>
+    <div class='form-group  col-sm-4'>
+        <label> Blood Group:<span class='required-red'>*</span>
+            <ng-select 
+              [items]="bloodGroupList"
+              bindLabel="name"
+              bindValue="name"
+              [multiple]="false"
+              clearAllText="Clear"
+              formControlName="blood"
+              placeholder="Select Blood Group">
+          </ng-select>
+          <div class='alert alert-danger' *ngIf="f.blood.errors && !donorForm.get('blood').untouched">
+              <div *ngIf='f.blood.errors.required'>Select blood group</div>
+          </div>
+        </label>
+    </div>
+    <div class='form-group  col-sm-4'>
+        <label> Acceptable Blood:<span class='required-red'>*</span>
+            <ng-select 
+            [items]="bloodGroupList"
+            bindLabel="name"
+            bindValue="name"
+            [multiple]="true"
+            clearAllText="Clear"
+            [closeOnSelect] ='flase'
+            [hideSelected] = 'true'
+            formControlName="acceptBlood"
+            >
+        </ng-select>
+        <div class='alert alert-danger' *ngIf="f.acceptBlood.errors && !donorForm.get('acceptBlood').untouched">
+            <div *ngIf='f.acceptBlood.errors.required'>Select blood group</div>
+        </div>
+        </label>
+    </div>
+    </div>
+    <div class='row'>
+    <div class='form-group  col-sm-4' >
+        <label> Previous experience:
+          <input type="checkbox" class='' formControlName='experience' (change)='showDate = !showDate'>
+        </label>
+    </div>
+    <div class='form-group  col-sm-4' *ngIf='showDate'>
+        <label> Last Donated:<span class='required-red'>*</span>
+          <input type="Date" class="form-control" formControlName='lastDonated' name='date' #date>
+          <div class='alert alert-danger' *ngIf="showDate && date.value== '' && submitted">
+                <div>Date is required</div>
+          </div>
+        </label>
+    </div>
+  </div> 
+    <div class='form-group '>
+      <input type="submit" class='btn btn-primary' value='Submit' style="margin-right: 20px">
+      <button class='btn btn-primary' (click)='addflag = !addflag'> Cancel</button>
+    </div>
+  </form>
+</div>
+
+<div *ngIf='!addflag'>
+  <h2>Donor Details</h2>
+  <button class="btn btn-primary" (click) = 'addflag = !addflag' style="margin-bottom: 20px;"> + Donor</button>
+  <table class='table'>
+      <thead>
+        <tr>
+          <th scope='col'>Name</th>
+          <th scope='col'>Address</th>
+          <th scope='col'>Phone No.</th>
+          <th scope='col'>Blood Group</th>
+          <th scope='col'>Acceptable Group</th>
+          <th scope='col'>Last Donated</th>
+          <th scope='col'>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr scope='row' *ngFor='let donor of donorList'>
+          <td scope='col'>{{ donor.name}}</td>
+          <td scope='col'>{{ donor.address}}</td>
+          <td scope='col'>{{ donor.mobile}}</td>
+          <td scope='col'>{{ getBlood(donor.blood)}}</td>
+          <td scope='col'>{{ getBloodArr(donor.acceptBlood) }}</td>
+          <td scope='col'>{{ donor.lastDonated}}</td>
+          <td scope='col'><span>DONATE</span></td>
+        </tr>
+      </tbody>
+    </table>
+</div>
